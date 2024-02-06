@@ -1,9 +1,19 @@
-import { useState } from "react";
-import { CountryData, Country } from "../definitions/types";
-import CountryRows from "./CountryRows";
-export default function CountryTable(data: CountryData) {
-   const [selectedIndex, setSelectedIndex] = useState<number>(9);
-   const { countries } = data;
+import { useState } from 'react';
+import { Country } from '../definitions/types';
+import CountryRows from './CountryRows';
+
+type CountryTableProps = {
+   countries: Country[];
+   defaultSelected: number;
+};
+
+const CountryTable: React.FC<CountryTableProps> = ({
+   countries,
+   defaultSelected,
+}) => {
+   
+   const [selectedIndex, setSelectedIndex] = useState<number>(defaultSelected);
+   console.log(defaultSelected);
    return (
       <>
          {countries.map((country: Country, index: number) => (
@@ -15,4 +25,6 @@ export default function CountryTable(data: CountryData) {
          ))}
       </>
    );
-}
+};
+
+export default CountryTable;
