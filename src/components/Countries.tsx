@@ -1,27 +1,46 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import CountryTable from './CountryTable';
 import { Country } from '../definitions/types';
+
 export default function Countries({ countries }: { countries: Country[] }) {
    const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
-   const filter = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const [currencyFilter, setCurrencyFilter] = useState<string>('');
+
+   const filter = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       const filtered = countries.filter((country) => {
-         return (
+         const matchesText =
             country.name?.toLowerCase().includes(value.toLowerCase()) ||
             country.native?.toLowerCase().includes(value.toLowerCase()) ||
-            country.capital?.toLowerCase().includes(value.toLowerCase())
-         );
+            country.capital?.toLowerCase().includes(value.toLowerCase());
+         const matchesCurrency =
+            !currencyFilter || country.currency === currencyFilter;
+            console.log(matchesCurrency);
+         return matchesText && matchesCurrency;
       });
       setFilteredCountries(filtered);
+   }, [countries, currencyFilter]);
+
+   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setCurrencyFilter(e.target.value);
    };
 
    useEffect(() => {
       setFilteredCountries(countries);
    }, [countries]);
+
+   useEffect(() => {
+      filter({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
+   }, [currencyFilter, filter]);
    return (
       <>
          <div className="bg-red-200 w-full h-10 flex items-center px-2">
             <input type="text" onChange={filter} />
+            <select onChange={handleCurrencyChange}>
+               <option value="">All Currencies</option>
+               <option value="usd">USD</option>
+               <option value="eur">EUR</option>
+            </select>
          </div>
          <table className="table-auto" key="countryTable">
             <thead>
@@ -51,7 +70,7 @@ export default function Countries({ countries }: { countries: Country[] }) {
                <CountryTable
                   countries={filteredCountries}
                   defaultSelected={
-                     filteredCountries?.length > 10 ? 9 : filteredCountries?.length -1 
+                     countries.length > 10 ? 9 : countries.length - 1
                   }
                />
             </tbody>
