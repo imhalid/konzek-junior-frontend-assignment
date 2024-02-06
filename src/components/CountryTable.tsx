@@ -1,23 +1,18 @@
-import { Country } from '../definitions/types';
-
-export default function CountryTable({ countryData }: { countryData: Country }) {
-   const { name, native, capital, emoji, currency, languages } = countryData;
+import { useState } from "react";
+import { CountryData, Country } from "../definitions/types";
+import CountryRows from "./CountryRows";
+export default function CountryTable(data: CountryData) {
+   const [selectedIndex, setSelectedIndex] = useState<number>(9);
+   const { countries } = data;
    return (
-      <tbody>
-         <tr key={name}>
-            <td>{name}</td>
-            <td>{native}</td>
-            <td>{capital}</td>
-            <td>{emoji}</td>
-            <td>{currency}</td>
-            <td>
-               <ul>
-                  {languages.map((language) => (
-                     <li key={language.code}>{language.name}</li>
-                  ))}
-               </ul>
-            </td>
-         </tr>
-      </tbody>
+      <>
+         {countries.map((country: Country, index: number) => (
+            <CountryRows
+               selected={index === selectedIndex}
+               onSelect={() => setSelectedIndex(index)}
+               countryData={country}
+            />
+         ))}
+      </>
    );
 }
