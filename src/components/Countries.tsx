@@ -4,10 +4,6 @@ import { Country } from '../definitions/types';
 import Select from 'react-select';
 import { extractList, listDuplicates } from '../utils/lister.js'
 
-//    country.name?.toLowerCase().includes(value.toLowerCase()) ||
-//    country.native?.toLowerCase().includes(value.toLowerCase()) ||
-//    country.capital?.toLowerCase().includes(value.toLowerCase());
-
 export default function Countries({ countries }: { countries: Country[] }) {
    const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>([]);
    const [searchText, setSearchText] = useState<string>('');
@@ -61,15 +57,17 @@ export default function Countries({ countries }: { countries: Country[] }) {
             <div className="flex flex-wrap text-xs">
                <Select
                   closeMenuOnSelect={false}
-                  options={duplicatesLanguage.map((language: any) => ({
-                     value: language,
-                     label: language,
-                  }))}
+                  options={duplicatesLanguage.map(
+                     (language) => ({
+                        value: language,
+                        label: language,
+                     })
+                  )}
                   isMulti
                   className="w-64"
                   onChange={(selected) => {
                      setSelectedLanguages(
-                        selected.map((language: any) => language.value)
+                        selected.map((language) => language.value)
                      );
                   }}
                />
@@ -83,7 +81,7 @@ export default function Countries({ countries }: { countries: Country[] }) {
                   className="w-64"
                   onChange={(selected) => {
                      setSelectedCurrencies(
-                        selected.map((currency: any) => currency.value)
+                        selected.map((currency) => currency.value)
                      );
                   }}
                />
