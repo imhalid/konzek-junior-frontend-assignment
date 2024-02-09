@@ -52,19 +52,22 @@ export default function Countries({ countries }: { countries: Country[] }) {
 
    return (
       <>
-         <div className="bg-red-200 w-full h-10 flex items-center px-2">
-            <input type="text" onChange={(e) => setSearchText(e.target.value)} />
-            <div className="flex flex-wrap text-xs">
+         <div className="bg-blue-300 px-2 rounded-tl-md rounded-tr-md w-full py-5 md:py-14 gap-5 flex md:items-center flex-col">
+            <input
+               type="text"
+               placeholder="Name, Native Name or Capital"
+               onChange={(e) => setSearchText(e.target.value)}
+               className="bg-white h-9 min-w-[220px] rounded-sm px-2 focus:outline-blue-500"
+            />
+            <div className="flex gap-5 flex-wrap text-xs">
                <Select
                   closeMenuOnSelect={false}
-                  options={duplicatesLanguage.map(
-                     (language) => ({
-                        value: language,
-                        label: language,
-                     })
-                  )}
+                  options={duplicatesLanguage.map((language) => ({
+                     value: language,
+                     label: language,
+                  }))}
                   isMulti
-                  className="w-64"
+                  className="md:w-64 w-full"
                   onChange={(selected) => {
                      setSelectedLanguages(
                         selected.map((language) => language.value)
@@ -78,7 +81,7 @@ export default function Countries({ countries }: { countries: Country[] }) {
                      label: currency,
                   }))}
                   isMulti
-                  className="w-64"
+                  className="md:w-64 w-full"
                   onChange={(selected) => {
                      setSelectedCurrencies(
                         selected.map((currency) => currency.value)
@@ -87,39 +90,41 @@ export default function Countries({ countries }: { countries: Country[] }) {
                />
             </div>
          </div>
-         <table className="table-auto" key="countryTable">
-            <thead>
-               <tr className="bg-[#F9FAFB] h-10 text-left">
-                  <th className=" border" />
-                  <th className="px-2 text-slate-700 font-semibold border">
-                     Name
-                  </th>
-                  <th className="px-2 text-slate-700 font-semibold border">
-                     Native Name
-                  </th>
-                  <th className="px-2 text-slate-700 font-semibold border">
-                     Capital
-                  </th>
-                  <th className="px-2 text-slate-700 font-semibold border">
-                     Flag
-                  </th>
-                  <th className="px-2 text-slate-700 font-semibold border">
-                     Currency
-                  </th>
-                  <th className="px-2 text-slate-700 font-semibold border">
-                     Languages
-                  </th>
-               </tr>
-            </thead>
-            <tbody>
-               <CountryTable
-                  countries={filteredCountries}
-                  defaultSelected={
-                     countries.length > 10 ? 9 : countries.length - 1
-                  }
-               />
-            </tbody>
-         </table>
+         <div className="overflow-scroll">
+            <table className="table-auto" key="countryTable">
+               <thead>
+                  <tr className="bg-[#F9FAFB] h-10 text-left">
+                     <th className=" border min-w-[30px]" />
+                     <th className="px-2 text-slate-700 font-semibold border min-w-[240px]">
+                        Name
+                     </th>
+                     <th className="px-2 text-slate-700 font-semibold border min-w-[240px]">
+                        Native Name
+                     </th>
+                     <th className="px-2 text-slate-700 font-semibold border min-w-[170px]">
+                        Capital
+                     </th>
+                     <th className="px-2 text-slate-700 font-semibold border min-w-[50px]">
+                        Flag
+                     </th>
+                     <th className="px-2 text-slate-700 font-semibold border min-w-[305px]">
+                        Currency
+                     </th>
+                     <th className="px-2 text-slate-700 font-semibold border min-w-[305px]">
+                        Languages
+                     </th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <CountryTable
+                     countries={filteredCountries}
+                     defaultSelected={
+                        countries.length > 10 ? 9 : countries.length - 1
+                     }
+                  />
+               </tbody>
+            </table>
+         </div>
       </>
    );
 }

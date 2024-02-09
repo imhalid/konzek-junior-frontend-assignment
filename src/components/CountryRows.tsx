@@ -30,7 +30,9 @@ export default function CountryRows({
          <td className="px-2 py-2 whitespace-nowrap border">
             {capital || '------'}
          </td>
-         <td className="px-2 py-2 whitespace-nowrap border">{emoji}</td>
+         <td align="center" className="px-2 py-2 whitespace-nowrap border">
+            {emoji}
+         </td>
          <td className="px-2 py-2 whitespace-nowrap border">
             <ul className="list-disc w-72 text-xs flex flex-wrap">
                {splitCurrencies(currency) || '------'}
