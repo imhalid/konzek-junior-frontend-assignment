@@ -1,46 +1,93 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import CountryTable from './CountryTable';
 import { Country } from '../definitions/types';
+import Select from 'react-select';
+import { extractList, listDuplicates } from '../utils/lister.js'
+
+//    country.name?.toLowerCase().includes(value.toLowerCase()) ||
+//    country.native?.toLowerCase().includes(value.toLowerCase()) ||
+//    country.capital?.toLowerCase().includes(value.toLowerCase());
 
 export default function Countries({ countries }: { countries: Country[] }) {
-   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
-   const [currencyFilter, setCurrencyFilter] = useState<string>('');
+   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>([]);
+   const [searchText, setSearchText] = useState<string>('');
+   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+   
+   const [filteredCountries, setFilteredCountries] =
+      useState<Country[]>(countries);
 
-   const filter = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      const filtered = countries.filter((country) => {
-         const matchesText =
-            country.name?.toLowerCase().includes(value.toLowerCase()) ||
-            country.native?.toLowerCase().includes(value.toLowerCase()) ||
-            country.capital?.toLowerCase().includes(value.toLowerCase());
-         const matchesCurrency =
-            !currencyFilter || country.currency === currencyFilter;
-            console.log(matchesCurrency);
-         return matchesText && matchesCurrency;
-      });
-      setFilteredCountries(filtered);
-   }, [countries, currencyFilter]);
-
-   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setCurrencyFilter(e.target.value);
-   };
+   const currencyList = extractList(countries, 'currency');
+   console.log(currencyList);
+   const languageList = extractList(countries, 'languages');
+   console.log(languageList);
+   const duplicatesLanguage = listDuplicates(languageList);
+   console.log(duplicatesLanguage);
+   const duplicatesCurrency = listDuplicates(currencyList);
 
    useEffect(() => {
-      setFilteredCountries(countries);
-   }, [countries]);
+      let filtredCountries = [...countries]
+         if (searchText) {
+            filtredCountries = filtredCountries.filter((country) => {
+               return (
+                  country.name?.toLowerCase().includes(searchText.toLowerCase()) ||
+                  country.native?.toLowerCase().includes(searchText.toLowerCase()) ||
+                  country.capital?.toLowerCase().includes(searchText.toLowerCase())
+               );
+            });
+         }
 
-   useEffect(() => {
-      filter({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
-   }, [currencyFilter, filter]);
+         if (selectedCurrencies.length > 0) {
+            filtredCountries = filtredCountries.filter((country) => {
+               return selectedCurrencies.includes(country.currency);
+            });
+         }
+
+         if (selectedLanguages.length > 0) {
+            filtredCountries = filtredCountries.filter((country) => {
+               return country.languages.some((language) =>
+                  selectedLanguages.includes(language.name)
+               );
+            });
+         }
+         
+         
+      setFilteredCountries(filtredCountries);
+   }, [countries, searchText, selectedCurrencies, selectedLanguages]);
+
    return (
       <>
          <div className="bg-red-200 w-full h-10 flex items-center px-2">
-            <input type="text" onChange={filter} />
-            <select onChange={handleCurrencyChange}>
-               <option value="">All Currencies</option>
-               <option value="usd">USD</option>
-               <option value="eur">EUR</option>
-            </select>
+            <input type="text" onChange={(e) => setSearchText(e.target.value)} />
+            <div className="flex flex-wrap text-xs">
+               <Select
+                  closeMenuOnSelect={false}
+                  options={duplicatesLanguage.map((language: any) => ({
+                     value: language,
+                     label: language,
+                  }))}
+                  isMulti
+                  className="w-64"
+                  onChange={(selected) => {
+                     setSelectedLanguages(
+                        selected.map((language: any) => language.value)
+                     );
+                  }}
+               />
+               <Select
+                  closeMenuOnSelect={false}
+                  options={duplicatesCurrency.map((currency) => ({
+                     value: currency,
+                     label: currency,
+                  }))}
+                  isMulti
+                  className="w-64"
+                  onChange={(selected) => {
+                     setSelectedCurrencies(
+                        selected.map((currency: any) => currency.value)
+                     );
+                  }}
+               />
+            </div>
          </div>
          <table className="table-auto" key="countryTable">
             <thead>

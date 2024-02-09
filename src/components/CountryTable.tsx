@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Country } from '../definitions/types';
 import CountryRows from './CountryRows';
 
@@ -13,9 +13,8 @@ const CountryTable: React.FC<CountryTableProps> = ({
 }) => {
    
    const [selectedIndex, setSelectedIndex] = useState<number>(defaultSelected);
-   console.log(defaultSelected);
    return (
-      <>
+      <React.Fragment key={'countryTable'}>
          {countries.map((country: Country, index: number) => (
             <CountryRows
                selected={index === selectedIndex}
@@ -23,7 +22,7 @@ const CountryTable: React.FC<CountryTableProps> = ({
                countryData={country}
             />
          ))}
-      </>
+      </React.Fragment>
    );
 };
 
