@@ -11,7 +11,7 @@ export default function CountryRows({
 }) {
    const { name, native, capital, emoji, currency, languages } = countryData;
    return (
-      <tr key={emoji} className={`text-gray-700 ${selected ? 'bg-sky-50' : ''}`}>
+      <tr key={emoji} className={`text-gray-700 hover:bg-orange-50 ${selected ? 'bg-orange-300 hover:bg-orange-300' : ''}`}>
          <td className="border px-2">
             <input
                type="radio"

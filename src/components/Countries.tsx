@@ -13,11 +13,8 @@ export default function Countries({ countries }: { countries: Country[] }) {
       useState<Country[]>(countries);
 
    const currencyList = extractList(countries, 'currency');
-   console.log(currencyList);
    const languageList = extractList(countries, 'languages');
-   console.log(languageList);
    const duplicatesLanguage = listDuplicates(languageList);
-   console.log(duplicatesLanguage);
    const duplicatesCurrency = listDuplicates(currencyList);
 
    useEffect(() => {
@@ -52,14 +49,14 @@ export default function Countries({ countries }: { countries: Country[] }) {
 
    return (
       <>
-         <div className="bg-blue-300 px-2 rounded-tl-md rounded-tr-md w-full py-5 md:py-14 gap-5 flex md:items-center flex-col">
+         <div className="bg-orange-300 px-2 rounded-tl-md rounded-tr-md w-full py-5 gap-5 flex md:items-center flex-col md:flex-row">
             <input
                type="text"
                placeholder="Name, Native Name or Capital"
                onChange={(e) => setSearchText(e.target.value)}
-               className="bg-white h-9 min-w-[220px] rounded-sm px-2 focus:outline-blue-500"
+               className="bg-white h-9 min-w-[220px] rounded-sm px-2 focus:outline-orange-500"
             />
-            <div className="flex gap-5 flex-wrap text-xs">
+            <div className="flex gap-5 flex-wrap text-xs items-center">
                <Select
                   closeMenuOnSelect={false}
                   options={duplicatesLanguage.map((language) => ({
@@ -90,7 +87,7 @@ export default function Countries({ countries }: { countries: Country[] }) {
                />
             </div>
          </div>
-         <div className="overflow-scroll">
+         <div className="overflow-scroll h-[calc(100vh-130px)]">
             <table className="table-auto" key="countryTable">
                <thead>
                   <tr className="bg-[#F9FAFB] h-10 text-left">
